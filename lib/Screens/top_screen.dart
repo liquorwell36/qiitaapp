@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
 import 'package:qiitaapp/screens/home_screen.dart';
@@ -13,6 +15,23 @@ class TopScreen extends StatefulWidget {
 }
 
 class _TopScreenState extends State<TopScreen> {
+  late String _state;
+  late StreamSubscription _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _state = _randomString(40);
+    _sub = uriLinkStream.listen((event) {
+      if (event!.path == '/oauth/authorize/callback') {
+        _onAuthorizedCallbackIsCalled(event);
+        print("Callback Succeed!");
+      }
+    }, onError: (error) {
+      print("Error: ${error}");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,7 +82,7 @@ class _TopScreenState extends State<TopScreen> {
   }
 
   void _onSignInButtonIsPressed() {
-    launch(QiitaRepository().createAuthUrl(_randomString(40)));
+    launch(QiitaRepository().createAuthUrl(_state));
   }
 
   String _randomString(int length) {
@@ -74,5 +93,9 @@ class _TopScreenState extends State<TopScreen> {
       return chars.codeUnitAt(n);
     });
     return String.fromCharCodes(codeUnits);
+  }
+
+  void _onAuthorizedCallbackIsCalled(Uri event) {
+    closeWebView();
   }
 }
