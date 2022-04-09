@@ -15,6 +15,7 @@ class TopScreen extends StatefulWidget {
 }
 
 class _TopScreenState extends State<TopScreen> {
+  final QiitaRepository repository = QiitaRepository();
   late String _state;
   late StreamSubscription _sub;
 
@@ -25,11 +26,16 @@ class _TopScreenState extends State<TopScreen> {
     _sub = uriLinkStream.listen((event) {
       if (event!.path == '/oauth/authorize/callback') {
         _onAuthorizedCallbackIsCalled(event);
-        print("Callback Succeed!");
       }
     }, onError: (error) {
       print("Error: ${error}");
     });
+  }
+
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
   }
 
   @override
@@ -95,7 +101,13 @@ class _TopScreenState extends State<TopScreen> {
     return String.fromCharCodes(codeUnits);
   }
 
-  void _onAuthorizedCallbackIsCalled(Uri event) {
+  void _onAuthorizedCallbackIsCalled(Uri uri) async {
     closeWebView();
+    final accessToken =
+        await repository.createAccessTokenFromCallbackUri(uri, _state);
+    await repository.saveAccessToken(accessToken);
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 }
