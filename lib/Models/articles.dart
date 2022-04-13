@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../models/user.dart';
+
 class Article {
   final String title;
   final String url;
@@ -22,24 +24,5 @@ class Article {
   Map<String, dynamic> toJson() => {
         'title': title,
         'url': url,
-      };
-}
-
-class User {
-  final String id;
-  final String profileImageUrl;
-
-  User({
-    required this.id,
-    required this.profileImageUrl,
-  });
-
-  User.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        profileImageUrl = json['profile_image_url'];
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'profile_image_url': profileImageUrl,
       };
 }

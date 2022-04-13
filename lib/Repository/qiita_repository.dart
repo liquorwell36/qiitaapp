@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:qiitaapp/models/articles.dart';
+import 'package:qiitaapp/models/user.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QiitaRepository {
@@ -26,8 +28,13 @@ class QiitaRepository {
         url: article['url'],
         renderedBody: article['rendered_body'],
         user: User(
-            id: article['user']['id'],
-            profileImageUrl: article['user']['profile_image_url']),
+          id: article['user']['id'],
+          profileImageUrl: article['user']['profile_image_url'],
+          name: article['user']['name'],
+          description: article['user']['description'],
+          itemsCount: article['user']['itemsCount'],
+          followersCount: article['user']['followersCount'],
+        ),
       );
     }).toList();
     return articleList;
@@ -46,8 +53,13 @@ class QiitaRepository {
         url: article['url'],
         renderedBody: article['rendered_body'],
         user: User(
-            id: article['user']['id'],
-            profileImageUrl: article['user']['profile_image_url']),
+          id: article['user']['id'],
+          profileImageUrl: article['user']['profile_image_url'],
+          name: article['user']['name'],
+          description: article['user']['description'],
+          itemsCount: article['user']['itemsCount'],
+          followersCount: article['user']['followersCount'],
+        ),
       );
     }).toList();
 
@@ -97,5 +109,43 @@ class QiitaRepository {
   Future<bool> accessTokenIsSaved() async {
     final accessToken = await getAccessToken();
     return accessToken != null;
+  }
+
+  Future<User> getAuthenticatedUser() async {
+    final accessToken = await getAccessToken();
+    final response = await http.get(
+      Uri.parse('https://qiita.com/api/v2/authenticated_user'),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    final body = jsonDecode(response.body);
+    final user = _mapToUser(body);
+    return user;
+  }
+
+  _mapToUser(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      profileImageUrl: map['profile_image_url'],
+      name: map['name'],
+      description: map['description'],
+      itemsCount: map['itemsCount'],
+      followersCount: map['followersCount'],
+    );
+  }
+
+  Future<void> revokeSavedAccessToken() async {
+    final accessToken = await getAccessToken();
+    final response = await http.delete(
+      Uri.parse('https://qiita.com/api/v2/access_tokens/$accessToken'),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to revoke the access token');
+    }
   }
 }

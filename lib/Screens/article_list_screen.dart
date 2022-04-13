@@ -45,10 +45,6 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                                     builder: (_) => ArticleScreen(
                                           article: article,
                                         )));
-                                print("tappped URL: ${article.url}");
-                                print(
-                                    "tapped Image URL: ${article.user.profileImageUrl}");
-                                print("Function Type: ${_functionType}");
                               },
                               child: articleCard(
                                 title: article.title,
