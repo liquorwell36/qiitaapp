@@ -28,12 +28,12 @@ class QiitaRepository {
         url: article['url'],
         renderedBody: article['rendered_body'],
         user: User(
-          id: article['user']['id'],
-          profileImageUrl: article['user']['profile_image_url'],
-          name: article['user']['name'],
-          description: article['user']['description'],
-          itemsCount: article['user']['itemsCount'],
-          followersCount: article['user']['followersCount'],
+          id: article['user']['id'] ?? "",
+          profileImageUrl: article['user']['profile_image_url'] ?? "",
+          name: article['user']['name'] ?? "",
+          description: article['user']['description'] ?? "",
+          itemsCount: article['user']['itemsCount'] ?? 0,
+          followersCount: article['user']['followersCount'] ?? 0,
         ),
       );
     }).toList();
@@ -53,12 +53,12 @@ class QiitaRepository {
         url: article['url'],
         renderedBody: article['rendered_body'],
         user: User(
-          id: article['user']['id'],
-          profileImageUrl: article['user']['profile_image_url'],
-          name: article['user']['name'],
-          description: article['user']['description'],
-          itemsCount: article['user']['itemsCount'],
-          followersCount: article['user']['followersCount'],
+          id: article['user']['id'] ?? "",
+          profileImageUrl: article['user']['profile_image_url'] ?? "",
+          name: article['user']['name'] ?? "",
+          description: article['user']['description'] ?? "",
+          itemsCount: article['user']['itemsCount'] ?? 0,
+          followersCount: article['user']['followersCount'] ?? 0,
         ),
       );
     }).toList();
@@ -126,12 +126,12 @@ class QiitaRepository {
 
   _mapToUser(Map<String, dynamic> map) {
     return User(
-      id: map['id'],
-      profileImageUrl: map['profile_image_url'],
-      name: map['name'],
-      description: map['description'],
-      itemsCount: map['itemsCount'],
-      followersCount: map['followersCount'],
+      id: map['id'] ?? "",
+      profileImageUrl: map['profile_image_url'] ?? "",
+      name: map['name'] ?? "",
+      description: map['description'] ?? "",
+      itemsCount: map['itemsCount'] ?? 0,
+      followersCount: map['followersCount'] ?? 0,
     );
   }
 
