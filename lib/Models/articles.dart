@@ -14,15 +14,4 @@ class Article {
     required this.renderedBody,
     required this.user,
   });
-
-  Article.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
-        url = json['url'],
-        renderedBody = json['rendered_body'],
-        user = User.fromJson(json['user']);
-
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'url': url,
-      };
 }
