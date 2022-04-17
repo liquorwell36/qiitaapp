@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/Repository/qiita_repository.dart';
 
 class TagScreen extends StatefulWidget {
   TagScreen({Key? key}) : super(key: key);
@@ -11,10 +13,43 @@ class _TagScreenState extends State<TagScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.purple[100],
-      width: double.infinity,
-      height: double.infinity,
-      child: Text("tag"),
+      padding: EdgeInsets.all(8),
+      child: FutureBuilder<List<Tag>>(
+        future: QiitaRepository().getTagList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final tagList = snapshot.data!;
+            return ListView.builder(
+              itemCount: tagList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  child: ListTile(
+                    leading: Container(
+                      width: 32,
+                      height: 32,
+                      child: ClipRRect(
+                        child: Image.network(
+                          tagList[index].icon_url!,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.auto_awesome_mosaic);
+                          },
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    title: Text("${tagList[index].id}"),
+                  ),
+                  onTap: () {
+                    print("tapped");
+                  },
+                );
+              },
+            );
+          } else {
+            return const Text("not found tag");
+          }
+        },
+      ),
     );
   }
 }

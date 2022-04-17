@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qiitaapp/Models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 
@@ -32,8 +33,8 @@ class QiitaRepository {
           profileImageUrl: article['user']['profile_image_url'] ?? "",
           name: article['user']['name'] ?? "",
           description: article['user']['description'] ?? "",
-          itemsCount: article['user']['itemsCount'] ?? 0,
-          followersCount: article['user']['followersCount'] ?? 0,
+          itemsCount: article['user']['items_count'] ?? 0,
+          followersCount: article['user']['followers_count'] ?? 0,
         ),
       );
     }).toList();
@@ -57,8 +58,8 @@ class QiitaRepository {
           profileImageUrl: article['user']['profile_image_url'] ?? "",
           name: article['user']['name'] ?? "",
           description: article['user']['description'] ?? "",
-          itemsCount: article['user']['itemsCount'] ?? 0,
-          followersCount: article['user']['followersCount'] ?? 0,
+          itemsCount: article['user']['items_count'] ?? 0,
+          followersCount: article['user']['followers_count'] ?? 0,
         ),
       );
     }).toList();
@@ -130,8 +131,8 @@ class QiitaRepository {
       profileImageUrl: map['profile_image_url'] ?? "",
       name: map['name'] ?? "",
       description: map['description'] ?? "",
-      itemsCount: map['itemsCount'] ?? 0,
-      followersCount: map['followersCount'] ?? 0,
+      itemsCount: map['items_count'] ?? 0,
+      followersCount: map['followers_count'] ?? 0,
     );
   }
 
@@ -147,5 +148,26 @@ class QiitaRepository {
     if (response.statusCode != 204) {
       throw Exception('Failed to revoke the access token');
     }
+  }
+
+  Future<List<Tag>> getTagList({int page = 1}) async {
+    String url = "https://qiita.com/api/v2/tags?page=$page&sort=count";
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'content-type': 'application/json',
+      },
+    );
+    final body = jsonDecode(response.body);
+    final tagsList = (body as List<dynamic>).map((item) {
+      return Tag(
+        followers_count: item['followers_count'],
+        icon_url: item['icon_url'],
+        id: item['id'],
+        items_count: item['items_count'],
+      );
+    }).toList();
+    return tagsList;
   }
 }
