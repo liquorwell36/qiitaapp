@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qiitaapp/Models/tag.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
+import 'package:qiitaapp/Screens/tag_results_screen.dart';
 
 class TagScreen extends StatefulWidget {
   TagScreen({Key? key}) : super(key: key);
@@ -40,7 +41,12 @@ class _TagScreenState extends State<TagScreen> {
                     title: Text("${tagList[index].id}"),
                   ),
                   onTap: () {
-                    print("tapped");
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            TagResultsScreen(tagID: tagList[index].id),
+                      ),
+                    );
                   },
                 );
               },

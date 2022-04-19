@@ -16,36 +16,20 @@ class QiitaRepository {
     return 'https://qiita.com/api/v2/oauth/authorize?client_id=$clientID&scope=$scope&state=$state';
   }
 
-  Future<List<Article>> getArticleList({int page = 1}) async {
-    String url = "https://qiita.com/api/v2/items?page=$page";
-
-    final response = await http.get(
-      Uri.parse(url),
-    );
-    final body = jsonDecode(response.body);
-    final articleList = (body as List<dynamic>).map((article) {
-      return Article(
-        title: article['title'],
-        url: article['url'],
-        renderedBody: article['rendered_body'],
-        user: User(
-          id: article['user']['id'] ?? "",
-          profileImageUrl: article['user']['profile_image_url'] ?? "",
-          name: article['user']['name'] ?? "",
-          description: article['user']['description'] ?? "",
-          itemsCount: article['user']['items_count'] ?? 0,
-          followersCount: article['user']['followers_count'] ?? 0,
-        ),
-      );
-    }).toList();
-    return articleList;
-  }
-
-  Future<List<Article>> searchArticleList({
+  Future<List<Article>> fetchArticleList({
     int page = 1,
-    required String searchText,
+    String? searchText,
+    String? tagID,
   }) async {
-    String url = "https://qiita.com/api/v2/items?page=$page&query=$searchText";
+    String url;
+    if (searchText != null) {
+      url = "https://qiita.com/api/v2/items?page=$page&query=$searchText";
+    } else if (tagID != null) {
+      url = "https://qiita.com/api/v2/tags/$tagID/items?page=$page";
+    } else {
+      url = "https://qiita.com/api/v2/items?page=$page";
+    }
+
     final response = await http.get(Uri.parse(url));
     final body = jsonDecode(response.body);
     final articleList = (body as List<dynamic>).map((article) {
@@ -63,7 +47,6 @@ class QiitaRepository {
         ),
       );
     }).toList();
-
     return articleList;
   }
 
