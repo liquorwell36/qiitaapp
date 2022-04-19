@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qiitaapp/Models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 
@@ -15,36 +16,20 @@ class QiitaRepository {
     return 'https://qiita.com/api/v2/oauth/authorize?client_id=$clientID&scope=$scope&state=$state';
   }
 
-  Future<List<Article>> getArticleList({int page = 1}) async {
-    String url = "https://qiita.com/api/v2/items?page=$page";
-
-    final response = await http.get(
-      Uri.parse(url),
-    );
-    final body = jsonDecode(response.body);
-    final articleList = (body as List<dynamic>).map((article) {
-      return Article(
-        title: article['title'],
-        url: article['url'],
-        renderedBody: article['rendered_body'],
-        user: User(
-          id: article['user']['id'] ?? "",
-          profileImageUrl: article['user']['profile_image_url'] ?? "",
-          name: article['user']['name'] ?? "",
-          description: article['user']['description'] ?? "",
-          itemsCount: article['user']['itemsCount'] ?? 0,
-          followersCount: article['user']['followersCount'] ?? 0,
-        ),
-      );
-    }).toList();
-    return articleList;
-  }
-
-  Future<List<Article>> searchArticleList({
+  Future<List<Article>> fetchArticleList({
     int page = 1,
-    required String searchText,
+    String? searchText,
+    String? tagID,
   }) async {
-    String url = "https://qiita.com/api/v2/items?page=$page&query=$searchText";
+    String url;
+    if (searchText != null) {
+      url = "https://qiita.com/api/v2/items?page=$page&query=$searchText";
+    } else if (tagID != null) {
+      url = "https://qiita.com/api/v2/tags/$tagID/items?page=$page";
+    } else {
+      url = "https://qiita.com/api/v2/items?page=$page";
+    }
+
     final response = await http.get(Uri.parse(url));
     final body = jsonDecode(response.body);
     final articleList = (body as List<dynamic>).map((article) {
@@ -57,12 +42,11 @@ class QiitaRepository {
           profileImageUrl: article['user']['profile_image_url'] ?? "",
           name: article['user']['name'] ?? "",
           description: article['user']['description'] ?? "",
-          itemsCount: article['user']['itemsCount'] ?? 0,
-          followersCount: article['user']['followersCount'] ?? 0,
+          itemsCount: article['user']['items_count'] ?? 0,
+          followersCount: article['user']['followers_count'] ?? 0,
         ),
       );
     }).toList();
-
     return articleList;
   }
 
@@ -130,8 +114,8 @@ class QiitaRepository {
       profileImageUrl: map['profile_image_url'] ?? "",
       name: map['name'] ?? "",
       description: map['description'] ?? "",
-      itemsCount: map['itemsCount'] ?? 0,
-      followersCount: map['followersCount'] ?? 0,
+      itemsCount: map['items_count'] ?? 0,
+      followersCount: map['followers_count'] ?? 0,
     );
   }
 
@@ -147,5 +131,26 @@ class QiitaRepository {
     if (response.statusCode != 204) {
       throw Exception('Failed to revoke the access token');
     }
+  }
+
+  Future<List<Tag>> getTagList({int page = 1}) async {
+    String url = "https://qiita.com/api/v2/tags?page=$page&sort=count";
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'content-type': 'application/json',
+      },
+    );
+    final body = jsonDecode(response.body);
+    final tagsList = (body as List<dynamic>).map((item) {
+      return Tag(
+        followers_count: item['followers_count'],
+        icon_url: item['icon_url'],
+        id: item['id'],
+        items_count: item['items_count'],
+      );
+    }).toList();
+    return tagsList;
   }
 }

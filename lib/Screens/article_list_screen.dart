@@ -9,9 +9,10 @@ import 'package:qiitaapp/screens/article_screen.dart';
 import '../Repository/qiita_repository.dart';
 
 class ArticleListScreen extends StatefulWidget {
-  const ArticleListScreen({Key? key, required this.searchString})
+  const ArticleListScreen({Key? key, this.searchString, this.tagID})
       : super(key: key);
-  final String searchString;
+  final String? searchString;
+  final String? tagID;
 
   @override
   State<ArticleListScreen> createState() => _ArticleListScreenState();
@@ -20,10 +21,6 @@ class ArticleListScreen extends StatefulWidget {
 class _ArticleListScreenState extends State<ArticleListScreen> {
   @override
   Widget build(BuildContext context) {
-    var _functionType = (widget.searchString == "")
-        ? QiitaRepository().getArticleList()
-        : QiitaRepository().searchArticleList(searchText: widget.searchString);
-
     return Container(
       child: Column(
         children: [
@@ -31,7 +28,10 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               child: FutureBuilder<List<Article>>(
-                  future: _functionType,
+                  future: QiitaRepository().fetchArticleList(
+                    searchText: widget.searchString,
+                    tagID: widget.tagID,
+                  ),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<Article> articleList = snapshot.data!;
@@ -90,6 +90,7 @@ class articleCard extends StatelessWidget {
             child: Image.network(
               profileImageIcon,
               errorBuilder: (context, error, stackTrace) {
+                print("アイコンが読み込めませんでした；${error}");
                 return const Icon(
                   Icons.person_outline,
                   color: Colors.grey,
