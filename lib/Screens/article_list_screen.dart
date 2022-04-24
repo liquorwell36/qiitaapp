@@ -41,10 +41,13 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                           return Material(
                             child: InkWell(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
                                     builder: (_) => ArticleScreen(
-                                          article: article,
-                                        )));
+                                      article: article,
+                                    ),
+                                  ),
+                                );
                               },
                               child: articleCard(
                                 title: article.title,
@@ -87,15 +90,11 @@ class articleCard extends StatelessWidget {
           width: 32,
           height: 32,
           child: ClipRRect(
-            child: Image.network(
-              profileImageIcon,
-              errorBuilder: (context, error, stackTrace) {
-                print("アイコンが読み込めませんでした；${error}");
-                return const Icon(
-                  Icons.person_outline,
-                  color: Colors.grey,
-                  size: 32,
-                );
+            child: FadeInImage(
+              placeholder: const AssetImage("assets/person_filled.png"),
+              image: NetworkImage(profileImageIcon),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Image.asset("assets/person_filled.png");
               },
             ),
             borderRadius: BorderRadius.circular(8),
