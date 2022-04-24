@@ -68,15 +68,16 @@ class QiitaRepository {
         url: article['url'],
         renderedBody: article['rendered_body'],
         user: User(
-          id: article['user']['id'] ?? "",
-          profileImageUrl: article['user']['profile_image_url'] ?? "",
-          name: article['user']['name'] ?? "",
-          description: article['user']['description'] ?? "",
-          itemsCount: article['user']['items_count'] ?? 0,
-          followersCount: article['user']['followers_count'] ?? 0,
+          id: article['user']['id'],
+          profileImageUrl: article['user']['profile_image_url'],
+          name: article['user']['name'],
+          description: article['user']['description'],
+          itemsCount: article['user']['items_count'],
+          followersCount: article['user']['followers_count'],
         ),
       );
     }).toList();
+    print(articleList.length);
     return articleList;
   }
 

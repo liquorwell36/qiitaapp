@@ -12,21 +12,11 @@ class StockScreen extends StatefulWidget {
 }
 
 class _StockScreenState extends State<StockScreen> {
-  String user = "";
-  String? _userID;
+  late String? _userID;
 
   @override
   void initState() {
     super.initState();
-    _userID = asyncGetUserID();
-  }
-
-  asyncGetUserID() {
-    QiitaRepository().getAuthenticatedUser().then((value) {
-      print("stock user: ${value.id}");
-      return QiitaRepository().fetchUserArticleList(userID: value.id);
-    });
-    return "murimuri";
   }
 
   @override
@@ -38,7 +28,7 @@ class _StockScreenState extends State<StockScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               child: FutureBuilder(
-                future: QiitaRepository().fetchUserArticleList(userID: _userID),
+                future: getStock(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     List<Article> articleList = snapshot.data!;
@@ -75,6 +65,11 @@ class _StockScreenState extends State<StockScreen> {
         ],
       ),
     );
+  }
+
+  getStock() async {
+    var user = await QiitaRepository().getAuthenticatedUser();
+    return QiitaRepository().fetchUserArticleList(userID: user.id);
   }
 }
 
