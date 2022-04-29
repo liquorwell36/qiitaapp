@@ -12,13 +12,6 @@ class StockScreen extends StatefulWidget {
 }
 
 class _StockScreenState extends State<StockScreen> {
-  late String? _userID;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
