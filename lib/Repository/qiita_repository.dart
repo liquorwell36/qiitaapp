@@ -28,7 +28,6 @@ class QiitaRepository {
     } else if (tagID != null) {
       url = "https://qiita.com/api/v2/tags/$tagID/items?page=$page";
     } else if (userID != null) {
-      print("${userID}");
       url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
     } else {
       url = "https://qiita.com/api/v2/items?page=$page";
@@ -191,7 +190,10 @@ class QiitaRepository {
         'content-type': 'application/json',
       },
     );
-    final body = jsonDecode(response.body);
+    final body = await jsonDecode(response.body);
+    if (body is Map<String, dynamic>) {
+      print("リクエスト回数が超えてしまった。。。");
+    }
     final tagsList = (body as List<dynamic>).map((item) {
       return Tag(
         followers_count: item['followers_count'],

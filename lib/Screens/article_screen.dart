@@ -3,6 +3,7 @@ import 'package:qiitaapp/models/articles.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:qiitaapp/screens/tag_results_screen.dart';
 
 class ArticleScreen extends StatelessWidget {
   final Article article;
@@ -153,9 +154,16 @@ class _TagList extends StatelessWidget {
           children: tags.map((tag) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                "${tag.name},",
-                style: const TextStyle(color: Colors.grey),
+              child: InkWell(
+                child: Text(
+                  "${tag.name},",
+                  style: const TextStyle(color: Colors.grey),
+                ),
+                onTap: () {
+                  print("article_screen: ${tag.name}");
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (_) => TagResultsScreen(tagID: tag.name)));
+                },
               ),
             );
           }).toList(),

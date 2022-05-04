@@ -60,7 +60,10 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
   }
 
   void _loadArticleList(int page) {
-    QiitaRepository().fetchArticleList(page: page).then((value) {
+    QiitaRepository()
+        .fetchArticleList(
+            page: page, searchText: widget.searchString, tagID: widget.tagID)
+        .then((value) {
       setState(() {
         if (page == 1) {
           _articleList = value;

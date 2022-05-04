@@ -38,9 +38,10 @@ class _TagScreenState extends State<TagScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    title: Text("${tagList[index].id}"),
+                    title: Text(tagList[index].id),
                   ),
                   onTap: () {
+                    print("tag_screen: ${tagList[index].id}");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>
