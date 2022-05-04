@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 
@@ -49,6 +49,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'] ?? 0,
           followersCount: article['user']['followers_count'] ?? 0,
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     return articleList;
@@ -75,6 +84,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'],
           followersCount: article['user']['followers_count'],
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     print(articleList.length);

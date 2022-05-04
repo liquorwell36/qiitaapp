@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
 import 'package:qiitaapp/Screens/tag_results_screen.dart';
 
