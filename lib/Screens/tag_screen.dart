@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
 import 'package:qiitaapp/Screens/tag_results_screen.dart';
 
@@ -38,9 +38,10 @@ class _TagScreenState extends State<TagScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    title: Text("${tagList[index].id}"),
+                    title: Text(tagList[index].id),
                   ),
                   onTap: () {
+                    print("tag_screen: ${tagList[index].id}");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>

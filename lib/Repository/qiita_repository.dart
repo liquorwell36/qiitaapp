@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 
@@ -28,7 +28,6 @@ class QiitaRepository {
     } else if (tagID != null) {
       url = "https://qiita.com/api/v2/tags/$tagID/items?page=$page";
     } else if (userID != null) {
-      print("${userID}");
       url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
     } else {
       url = "https://qiita.com/api/v2/items?page=$page";
@@ -49,6 +48,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'] ?? 0,
           followersCount: article['user']['followers_count'] ?? 0,
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     return articleList;
@@ -75,6 +83,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'],
           followersCount: article['user']['followers_count'],
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     print(articleList.length);
@@ -173,7 +190,10 @@ class QiitaRepository {
         'content-type': 'application/json',
       },
     );
-    final body = jsonDecode(response.body);
+    final body = await jsonDecode(response.body);
+    if (body is Map<String, dynamic>) {
+      print("リクエスト回数が超えてしまった。。。");
+    }
     final tagsList = (body as List<dynamic>).map((item) {
       return Tag(
         followers_count: item['followers_count'],
