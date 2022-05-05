@@ -62,6 +62,9 @@ class _StockScreenState extends State<StockScreen> {
 
   getStock() async {
     var user = await QiitaRepository().getAuthenticatedUser();
+    if (user == null) {
+      return null;
+    }
     return QiitaRepository().fetchUserArticleList(userID: user.id);
   }
 }
