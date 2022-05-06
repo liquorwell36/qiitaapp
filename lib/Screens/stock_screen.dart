@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qiitaapp/models/articles.dart';
-import 'package:qiitaapp/Models/user.dart';
+import 'package:qiitaapp/models/user.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
-import 'package:qiitaapp/Screens/article_screen.dart';
+import 'package:qiitaapp/screens/article_screen.dart';
+
+import '../Screens/top_screen.dart';
 
 class StockScreen extends StatefulWidget {
   StockScreen({Key? key}) : super(key: key);
@@ -49,7 +51,34 @@ class _StockScreenState extends State<StockScreen> {
                       }).toList(),
                     );
                   } else {
-                    return const Text("サインインするとストックが一覧表示されます。");
+                    return Center(
+                        child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("ログインするとストックした記事の一覧表示されます。"),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.lightBlue,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              side: const BorderSide(
+                                color: Colors.grey,
+                                width: 1,
+                              )),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (_) => const TopScreen()),
+                            );
+                          },
+                          child: const Text(
+                            "ログイン",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ));
                   }
                 },
               ),
