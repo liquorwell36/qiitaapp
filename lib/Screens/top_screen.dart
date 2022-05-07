@@ -47,7 +47,7 @@ class _TopScreenState extends State<TopScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Qiita App',
+              'Qiitade',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

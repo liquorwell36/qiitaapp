@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Qiita App'),
+        title: const Text('Qiitade'),
         actions: [
           FutureBuilder(
             future: QiitaRepository().getAuthenticatedUser(),
