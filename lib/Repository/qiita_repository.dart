@@ -123,6 +123,15 @@ class QiitaRepository {
     return accessToken;
   }
 
+  bool isAccessToken() {
+    final accessToken = getAccessToken();
+    if (accessToken == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<void> saveAccessToken(accessToken) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(keyAccessToken, accessToken);

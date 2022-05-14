@@ -40,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       profileImageUrl: snapshot.data.profileImageUrl,
                     )
                   : const Icon(Icons.person);
-              if (snapshot.hasData) {
-                PopupMenuButton(
+              if (QiitaRepository().isAccessToken()) {
+                return PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'profile') {
                       _onProfileMenuIsSelected(snapshot.data);
@@ -63,21 +63,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ];
                   },
                 );
+              } else {
+                return PopupMenuButton(
+                  onSelected: (value) {
+                    _onSignInMenuIsSelected();
+                  },
+                  icon: icon,
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'SignIn',
+                        child: Text("ログインする"),
+                      ),
+                    ];
+                  },
+                );
               }
-              return PopupMenuButton(
-                onSelected: (value) {
-                  _onSignInMenuIsSelected();
-                },
-                icon: icon,
-                itemBuilder: (context) {
-                  return [
-                    const PopupMenuItem(
-                      value: 'SignIn',
-                      child: Text("ログインする"),
-                    ),
-                  ];
-                },
-              );
             },
           ),
         ],
