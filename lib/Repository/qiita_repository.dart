@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qiitaapp/client_id.dart';
 import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
@@ -7,12 +8,12 @@ import 'package:qiitaapp/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QiitaRepository {
-  final clientID = "37ee46ec113748bb8a4a1dcaf873387db3b28356";
-  final clientSecret = "e7dd2d81abda5ee86e0cf3eb09300a4c0bb84411";
+  final clientID = CLIENT_ID;
+  final clientSecret = CLIENT_SECRET;
   final keyAccessToken = 'qiita/accessToken';
 
   String createAuthUrl(String state) {
-    final scope = 'read_qiita';
+    const scope = 'read_qiita';
     return 'https://qiita.com/api/v2/oauth/authorize?client_id=$clientID&scope=$scope&state=$state';
   }
 

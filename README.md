@@ -1,16 +1,12 @@
-# qiitaapp
+# アプリの概要
 
-A new Flutter project.
+Flutter製の(Qiita)[https://qiita.com/]のクライアントアプリです。
+記事の取得や自身のQiitaアカウントにログインするとストックを一覧で見ることができます。
+(このアプリから記事の作成、コメントなどのPOST通信は行えません。)
 
-## Getting Started
+ログイン、ホーム画面、プロフィール画面は(flutter-study.dev)[https://www.flutter-study.dev/create-app/qiita-app]を参考に実装しました。
+他の検索、タグ一覧、ストック一覧、ログインしない場合での利用できる機能は追加機能として自ら実装しています。
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+実装概要
+ 
