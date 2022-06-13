@@ -14,6 +14,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final FocusNode _textNode = FocusNode();
 
   final TextEditingController _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   KeyboardActionsConfig _buildConfig(BuildContext context) {
     return KeyboardActionsConfig(
@@ -212,118 +213,135 @@ class _SearchScreenState extends State<SearchScreen> {
             Container(
               padding: const EdgeInsets.only(
                   top: 8, left: 16, right: 16, bottom: 16),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _controller,
-                    focusNode: _textNode,
-                    decoration:
-                        const InputDecoration(hintText: '検索ワードを入力してください。'),
-                    onFieldSubmitted: (value) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SearchResultScreen(
-                            searchString: value,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 16),
-                    alignment: Alignment.centerLeft,
-                    child: const Text("検索オプション"),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: DataTable(
-                        sortAscending: false,
-                        columnSpacing: 0.0,
-                        headingRowHeight: 50.0,
-                        decoration: BoxDecoration(border: Border.all(width: 1)),
-                        columns: const [
-                          DataColumn(label: Text("項目")),
-                          DataColumn(label: Text("オプション")),
-                        ],
-                        rows: [
-                          DataRow(
-                            color: MaterialStateProperty.resolveWith((states) {
-                              return Colors.grey[200];
-                            }),
-                            cells: const [
-                              DataCell(Text("タイトルに「2015」を含む")),
-                              DataCell(Text("title:2015")),
-                            ],
-                          ),
-                          const DataRow(
-                            cells: [
-                              DataCell(Text("本文に「Qiita」を含む")),
-                              DataCell(Text("body:Qiita")),
-                            ],
-                          ),
-                          DataRow(
-                            color: MaterialStateProperty.resolveWith((states) {
-                              return Colors.grey[200];
-                            }),
-                            cells: const [
-                              DataCell(Text("コードに「Ruby」を含む")),
-                              DataCell(Text("code:Ruby")),
-                            ],
-                          ),
-                          const DataRow(
-                            cells: [
-                              DataCell(Text("「Ruby」タグが付く")),
-                              DataCell(Text("tag:Ruby")),
-                            ],
-                          ),
-                          DataRow(
-                            color: MaterialStateProperty.resolveWith((states) {
-                              return Colors.grey[200];
-                            }),
-                            cells: const [
-                              DataCell(Text("sampleuserが作成した")),
-                              DataCell(Text("user:sampleuser")),
-                            ],
-                          ),
-                          const DataRow(
-                            cells: [
-                              DataCell(Text("「tag:Ruby」を含まない")),
-                              DataCell(Text("-tag:Ruby")),
-                            ],
-                          ),
-                          DataRow(
-                            color: MaterialStateProperty.resolveWith((states) {
-                              return Colors.grey[200];
-                            }),
-                            cells: const [
-                              DataCell(Text("3件より多くストックされている")),
-                              DataCell(Text("stocks:>3")),
-                            ],
-                          ),
-                          const DataRow(
-                            cells: [
-                              DataCell(Text("2021-10-09以降に作成された")),
-                              DataCell(Text("created:>2021-10-09")),
-                            ],
-                          ),
-                          DataRow(
-                            color: MaterialStateProperty.resolveWith((states) {
-                              return Colors.grey[200];
-                            }),
-                            cells: const [
-                              DataCell(Text("2021-10-01 以降に更新された")),
-                              DataCell(Text("updated:>2021-10")),
-                            ],
-                          ),
-                          const DataRow(
-                            cells: [
-                              DataCell(Text("「Go」または「AWS」を含む")),
-                              DataCell(Text("Go OR AWS")),
-                            ],
-                          ),
-                        ]),
-                  )
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _controller,
+                      focusNode: _textNode,
+                      decoration:
+                          const InputDecoration(hintText: '検索ワードを入力してください。'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "空の文字列では検索できません。1文字以上入力してください。";
+                        }
+                        return null;
+                      },
+                      onFieldSubmitted: (value) {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SearchResultScreen(
+                                searchString: value,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 16),
+                      alignment: Alignment.centerLeft,
+                      child: const Text("検索オプション"),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: DataTable(
+                          sortAscending: false,
+                          columnSpacing: 0.0,
+                          headingRowHeight: 50.0,
+                          decoration:
+                              BoxDecoration(border: Border.all(width: 1)),
+                          columns: const [
+                            DataColumn(label: Text("項目")),
+                            DataColumn(label: Text("オプション")),
+                          ],
+                          rows: [
+                            DataRow(
+                              color:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.grey[200];
+                              }),
+                              cells: const [
+                                DataCell(Text("タイトルに「2015」を含む")),
+                                DataCell(Text("title:2015")),
+                              ],
+                            ),
+                            const DataRow(
+                              cells: [
+                                DataCell(Text("本文に「Qiita」を含む")),
+                                DataCell(Text("body:Qiita")),
+                              ],
+                            ),
+                            DataRow(
+                              color:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.grey[200];
+                              }),
+                              cells: const [
+                                DataCell(Text("コードに「Ruby」を含む")),
+                                DataCell(Text("code:Ruby")),
+                              ],
+                            ),
+                            const DataRow(
+                              cells: [
+                                DataCell(Text("「Ruby」タグが付く")),
+                                DataCell(Text("tag:Ruby")),
+                              ],
+                            ),
+                            DataRow(
+                              color:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.grey[200];
+                              }),
+                              cells: const [
+                                DataCell(Text("sampleuserが作成した")),
+                                DataCell(Text("user:sampleuser")),
+                              ],
+                            ),
+                            const DataRow(
+                              cells: [
+                                DataCell(Text("「tag:Ruby」を含まない")),
+                                DataCell(Text("-tag:Ruby")),
+                              ],
+                            ),
+                            DataRow(
+                              color:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.grey[200];
+                              }),
+                              cells: const [
+                                DataCell(Text("3件より多くストックされている")),
+                                DataCell(Text("stocks:>3")),
+                              ],
+                            ),
+                            const DataRow(
+                              cells: [
+                                DataCell(Text("2021-10-09以降に作成された")),
+                                DataCell(Text("created:>2021-10-09")),
+                              ],
+                            ),
+                            DataRow(
+                              color:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.grey[200];
+                              }),
+                              cells: const [
+                                DataCell(Text("2021-10-01 以降に更新された")),
+                                DataCell(Text("updated:>2021-10")),
+                              ],
+                            ),
+                            const DataRow(
+                              cells: [
+                                DataCell(Text("「Go」または「AWS」を含む")),
+                                DataCell(Text("Go OR AWS")),
+                              ],
+                            ),
+                          ]),
+                    )
+                  ],
+                ),
               ),
             )
           ],
