@@ -15,6 +15,17 @@ class _SearchScreenState extends State<SearchScreen> {
 
   final TextEditingController _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _searchOptions = [
+    "title:",
+    "body:",
+    "code:",
+    "tag:",
+    "-tag:",
+    "stock:",
+    "created:",
+    "updated:",
+    "OR",
+  ];
 
   KeyboardActionsConfig _buildConfig(BuildContext context) {
     return KeyboardActionsConfig(
@@ -28,168 +39,25 @@ class _SearchScreenState extends State<SearchScreen> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "title:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 4, right: 4),
+                  for (final searchOption in _searchOptions)
+                    GestureDetector(
+                      onTap: (() {
+                        _controller.text += searchOption;
+                        _controller.selection = TextSelection.fromPosition(
+                            TextPosition(offset: _controller.text.length));
+                      }),
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
+                        padding: const EdgeInsets.only(left: 4, right: 4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.black),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("${searchOption}"),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("title:"),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "body:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("body:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "code:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("code:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "tag:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("tag:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "-tag:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("-tag:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "stock:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("stock:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "created:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("created:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "updated:";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("updated:"),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      _controller.text += "OR ";
-                      _controller.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _controller.text.length));
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text("OR"),
-                      ),
-                    ),
-                  ),
                 ]),
               ),
             ),
