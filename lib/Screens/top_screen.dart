@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
 import 'package:qiitaapp/screens/home_screen.dart';
@@ -28,7 +29,9 @@ class _TopScreenState extends State<TopScreen> {
         _onAuthorizedCallbackIsCalled(event);
       }
     }, onError: (error) {
-      print("Error: ${error}");
+      if (kDebugMode) {
+        print("Error: ${error}");
+      }
     });
   }
 

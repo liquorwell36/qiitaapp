@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qiitaapp/screens/article_list_screen.dart';
 import 'package:qiitaapp/screens/search_results_screen.dart';
 
 class SearchScreen extends StatefulWidget {

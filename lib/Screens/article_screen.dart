@@ -12,7 +12,6 @@ class ArticleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String htmlData = article.renderedBody;
     return Scaffold(
       appBar: AppBar(
         title: Text(article.title),

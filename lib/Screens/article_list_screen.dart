@@ -7,6 +7,7 @@ import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/screens/article_screen.dart';
 
 import '../Repository/qiita_repository.dart';
+import '../components/article_card.dart';
 
 class ArticleListScreen extends StatefulWidget {
   const ArticleListScreen({Key? key, this.searchString, this.tagID})
@@ -35,7 +36,6 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<Article> articleList = snapshot.data!;
-
                       return ListView(
                         children: articleList.map((article) {
                           return Material(
@@ -49,7 +49,7 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                                   ),
                                 );
                               },
-                              child: articleCard(
+                              child: ArticleCard(
                                 title: article.title,
                                 author: article.user.id,
                                 profileImageIcon: article.user.profileImageUrl,
@@ -65,47 +65,6 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class articleCard extends StatelessWidget {
-  const articleCard({
-    Key? key,
-    required this.title,
-    required this.author,
-    required this.profileImageIcon,
-  }) : super(key: key);
-
-  final String title;
-  final String author;
-  final String profileImageIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Container(
-          width: 32,
-          height: 32,
-          child: ClipRRect(
-            child: FadeInImage(
-              placeholder: const AssetImage("assets/person_filled.png"),
-              image: NetworkImage(profileImageIcon),
-              imageErrorBuilder: (context, error, stackTrace) {
-                return Image.asset("assets/person_filled.png");
-              },
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        title: Text(
-          title,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text(author),
       ),
     );
   }

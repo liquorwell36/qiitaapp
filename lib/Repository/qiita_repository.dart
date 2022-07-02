@@ -12,7 +12,7 @@ class QiitaRepository {
   final keyAccessToken = 'qiita/accessToken';
 
   String createAuthUrl(String state) {
-    final scope = 'read_qiita';
+    const scope = 'read_qiita';
     return 'https://qiita.com/api/v2/oauth/authorize?client_id=$clientID&scope=$scope&state=$state';
   }
 
@@ -28,7 +28,6 @@ class QiitaRepository {
     } else if (tagID != null) {
       url = "https://qiita.com/api/v2/tags/$tagID/items?page=$page";
     } else if (userID != null) {
-      print("${userID}");
       url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
     } else {
       url = "https://qiita.com/api/v2/items?page=$page";
@@ -59,7 +58,6 @@ class QiitaRepository {
     String? userID,
   }) async {
     String url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
-    print(url);
     final response = await http.get(Uri.parse(url));
     final body = jsonDecode(response.body);
     final articleList = (body as List<dynamic>).map((article) {
@@ -77,7 +75,6 @@ class QiitaRepository {
         ),
       );
     }).toList();
-    print(articleList.length);
     return articleList;
   }
 
@@ -176,10 +173,10 @@ class QiitaRepository {
     final body = jsonDecode(response.body);
     final tagsList = (body as List<dynamic>).map((item) {
       return Tag(
-        followers_count: item['followers_count'],
-        icon_url: item['icon_url'],
+        followersCount: item['followers_count'],
+        iconUrl: item['icon_url'],
         id: item['id'],
-        items_count: item['items_count'],
+        itemsCount: item['items_count'],
       );
     }).toList();
     return tagsList;
