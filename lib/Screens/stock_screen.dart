@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/retry.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
@@ -25,9 +26,43 @@ class _StockScreenState extends State<StockScreen> {
               child: FutureBuilder(
                 future: getStock(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data == null) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("ログインするとストックした記事の一覧表示されます。"),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.lightBlue,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                side: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1,
+                                )),
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (_) => const TopScreen()),
+                              );
+                            },
+                            child: const Text(
+                              "ログイン",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
                     List<Article> articleList = snapshot.data!;
-
                     return ListView(
                       children: articleList.map((value) {
                         return Material(
@@ -50,40 +85,17 @@ class _StockScreenState extends State<StockScreen> {
                         );
                       }).toList(),
                     );
-                  } else {
+                  } else if (snapshot.hasError) {
                     return Center(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text("ログインするとストックした記事の一覧表示されます。"),
-                        const SizedBox(height: 8),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.lightBlue,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              side: const BorderSide(
-                                color: Colors.grey,
-                                width: 1,
-                              )),
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (_) => const TopScreen()),
-                            );
-                          },
-                          child: const Text(
-                            "ログイン",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ));
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    return const Text("Not found stock data.");
                   }
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -91,9 +103,6 @@ class _StockScreenState extends State<StockScreen> {
 
   getStock() async {
     var user = await QiitaRepository().getAuthenticatedUser();
-    if (user == null) {
-      return null;
-    }
     return QiitaRepository().fetchUserArticleList(userID: user.id);
   }
 }

@@ -70,6 +70,9 @@ class QiitaRepository {
     String url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
     print(url);
     final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 404) {
+      return [];
+    }
     final body = jsonDecode(response.body);
     final articleList = (body as List<dynamic>).map((article) {
       return Article(
