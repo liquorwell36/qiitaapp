@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qiitaapp/Repository/qiita_repository.dart';
 import 'package:qiitaapp/screens/home_screen.dart';
 import 'package:qiitaapp/screens/top_screen.dart';
 
@@ -17,7 +18,49 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TopScreen(),
+      home: const _LoadAccessToken(),
+    );
+  }
+}
+
+class _LoadAccessToken extends StatefulWidget {
+  const _LoadAccessToken({Key? key}) : super(key: key);
+
+  @override
+  State<_LoadAccessToken> createState() => __LoadAccessTokenState();
+}
+
+class __LoadAccessTokenState extends State<_LoadAccessToken> {
+  Error? _error;
+
+  @override
+  void initState() {
+    super.initState();
+
+    QiitaRepository().accessTokenIsSaved().then((value) {
+      if (value) {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      } else {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const TopScreen()));
+      }
+    }).catchError((e) {
+      setState(() {
+        _error = e;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      body: Center(
+        child: (_error == null)
+            ? const CircularProgressIndicator()
+            : Text(_error.toString()),
+      ),
     );
   }
 }

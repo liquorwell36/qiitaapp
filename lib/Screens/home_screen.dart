@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qiitaapp/Repository/qiita_repository.dart';
-import 'package:qiitaapp/Screens/top_screen.dart';
-import 'package:qiitaapp/Screens/user_profile_screen.dart';
+import 'package:qiitaapp/screens/top_screen.dart';
+import 'package:qiitaapp/screens/user_profile_screen.dart';
 import 'package:qiitaapp/screens/search_screen.dart';
 import 'package:qiitaapp/screens/stock_screen.dart';
 import 'package:qiitaapp/screens/tag_screen.dart';
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Qiita App'),
+        title: const Text('Qiitade'),
         actions: [
           FutureBuilder(
             future: QiitaRepository().getAuthenticatedUser(),
@@ -40,28 +40,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       profileImageUrl: snapshot.data.profileImageUrl,
                     )
                   : const Icon(Icons.person);
-              return PopupMenuButton(
-                onSelected: (value) {
-                  if (value == 'profile') {
-                    _onProfileMenuIsSelected(snapshot.data);
-                  } else {
-                    _onLogoutMenuIsSelected();
-                  }
-                },
-                icon: icon,
-                itemBuilder: (context) {
-                  return [
-                    const PopupMenuItem(
-                      value: 'profile',
-                      child: Text("プロフィール"),
-                    ),
-                    const PopupMenuItem(
-                      value: 'logout',
-                      child: Text("ログアウト"),
-                    ),
-                  ];
-                },
-              );
+              if (QiitaRepository().isAccessToken()) {
+                return PopupMenuButton(
+                  onSelected: (value) {
+                    if (value == 'profile') {
+                      _onProfileMenuIsSelected(snapshot.data);
+                    } else {
+                      _onLogoutMenuIsSelected();
+                    }
+                  },
+                  icon: icon,
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'profile',
+                        child: Text("プロフィール"),
+                      ),
+                      const PopupMenuItem(
+                        value: 'logout',
+                        child: Text("ログアウト"),
+                      ),
+                    ];
+                  },
+                );
+              } else {
+                return PopupMenuButton(
+                  onSelected: (value) {
+                    _onSignInMenuIsSelected();
+                  },
+                  icon: icon,
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'SignIn',
+                        child: Text("ログインする"),
+                      ),
+                    ];
+                  },
+                );
+              }
             },
           ),
         ],
@@ -96,6 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onLogoutMenuIsSelected() async {
     await QiitaRepository().revokeSavedAccessToken();
     await QiitaRepository().deleteAccessToken();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const TopScreen()),
+    );
+  }
+
+  void _onSignInMenuIsSelected() async {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const TopScreen()),
     );

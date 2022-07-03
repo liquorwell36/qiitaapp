@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:qiitaapp/Models/tag.dart';
+import 'package:qiitaapp/client_id.dart';
+import 'package:qiitaapp/models/tag.dart';
 import 'package:qiitaapp/models/articles.dart';
 import 'package:qiitaapp/models/user.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QiitaRepository {
-  final clientID = "37ee46ec113748bb8a4a1dcaf873387db3b28356";
-  final clientSecret = "e7dd2d81abda5ee86e0cf3eb09300a4c0bb84411";
+  final clientID = CLIENT_ID;
+  final clientSecret = CLIENT_SECRET;
   final keyAccessToken = 'qiita/accessToken';
 
   String createAuthUrl(String state) {
@@ -48,6 +49,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'] ?? 0,
           followersCount: article['user']['followers_count'] ?? 0,
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     return articleList;
@@ -59,6 +69,9 @@ class QiitaRepository {
   }) async {
     String url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
     final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 404) {
+      return [];
+    }
     final body = jsonDecode(response.body);
     final articleList = (body as List<dynamic>).map((article) {
       return Article(
@@ -73,6 +86,15 @@ class QiitaRepository {
           itemsCount: article['user']['items_count'],
           followersCount: article['user']['followers_count'],
         ),
+        createdAt: DateTime.parse(article['created_at']),
+        updatedAt: DateTime.parse(article['updated_at']),
+        tags: (article['tags'] as List<dynamic>).map((tag) {
+          return Tags(
+              name: tag['name'],
+              versions: (tag['versions'] as List<dynamic>)
+                  .map((v) => v as String)
+                  .toList());
+        }).toList(),
       );
     }).toList();
     return articleList;
@@ -101,6 +123,15 @@ class QiitaRepository {
     final accessToken = body['token'];
 
     return accessToken;
+  }
+
+  bool isAccessToken() {
+    final accessToken = getAccessToken();
+    if (accessToken == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<void> saveAccessToken(accessToken) async {
@@ -170,7 +201,10 @@ class QiitaRepository {
         'content-type': 'application/json',
       },
     );
-    final body = jsonDecode(response.body);
+    final body = await jsonDecode(response.body);
+    if (body is Map<String, dynamic>) {
+      print("リクエスト回数が超えてしまった。。。");
+    }
     final tagsList = (body as List<dynamic>).map((item) {
       return Tag(
         followersCount: item['followers_count'],
