@@ -30,68 +30,70 @@ class _StockScreenState extends State<StockScreen> {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  }
-                  if (snapshot.data == null) {
-                    return Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("ログインするとストックした記事の一覧表示されます。"),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.lightBlue,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                side: const BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                )),
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => const TopScreen()),
-                              );
-                            },
-                            child: const Text(
-                              "ログイン",
-                              style: TextStyle(color: Colors.white),
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data == null || snapshot.data.length == 0) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text("ログインするとストックした記事の一覧表示されます。"),
+                            const SizedBox(height: 8),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.lightBlue,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  side: const BorderSide(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (_) => const TopScreen()),
+                                );
+                              },
+                              child: const Text(
+                                "ログイン",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (snapshot.hasData) {
-                    List<Article> articleList = snapshot.data!;
-                    return ListView(
-                      children: articleList.map((value) {
-                        return Material(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => ArticleScreen(
-                                    article: value,
+                          ],
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      List<Article> articleList = snapshot.data!;
+                      return ListView(
+                        children: articleList.map((value) {
+                          return Material(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ArticleScreen(
+                                      article: value,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: articleCard(
-                              title: value.title,
-                              author: value.user.id,
-                              profileImageIcon: value.user.profileImageUrl,
+                                );
+                              },
+                              child: articleCard(
+                                title: value.title,
+                                author: value.user.id,
+                                profileImageIcon: value.user.profileImageUrl,
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(snapshot.error.toString()),
-                    );
+                          );
+                        }).toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    }
                   } else {
-                    return const Text("Not found stock data.");
+                    return const Text("Not connect.");
                   }
+                  return const Text("Not found stock data.");
                 },
               ),
             ),
