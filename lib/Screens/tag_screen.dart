@@ -30,7 +30,7 @@ class _TagScreenState extends State<TagScreen> {
                       height: 32,
                       child: ClipRRect(
                         child: Image.network(
-                          tagList[index].icon_url!,
+                          tagList[index].iconUrl!,
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(Icons.auto_awesome_mosaic);
                           },
@@ -41,7 +41,6 @@ class _TagScreenState extends State<TagScreen> {
                     title: Text(tagList[index].id),
                   ),
                   onTap: () {
-                    print("tag_screen: ${tagList[index].id}");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>

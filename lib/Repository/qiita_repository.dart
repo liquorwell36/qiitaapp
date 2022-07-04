@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:qiitaapp/client_id.dart';
 import 'package:qiitaapp/models/tag.dart';
@@ -68,7 +69,6 @@ class QiitaRepository {
     String? userID,
   }) async {
     String url = "https://qiita.com/api/v2/users/$userID/stocks?page=$page";
-    print(url);
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 404) {
       return [];
@@ -98,7 +98,6 @@ class QiitaRepository {
         }).toList(),
       );
     }).toList();
-    print(articleList.length);
     return articleList;
   }
 
@@ -205,14 +204,16 @@ class QiitaRepository {
     );
     final body = await jsonDecode(response.body);
     if (body is Map<String, dynamic>) {
-      print("リクエスト回数が超えてしまった。。。");
+      if (kDebugMode) {
+        print("リクエスト回数が超えてしまった。。。");
+      }
     }
     final tagsList = (body as List<dynamic>).map((item) {
       return Tag(
-        followers_count: item['followers_count'],
-        icon_url: item['icon_url'],
+        followersCount: item['followers_count'],
+        iconUrl: item['icon_url'],
         id: item['id'],
-        items_count: item['items_count'],
+        itemsCount: item['items_count'],
       );
     }).toList();
     return tagsList;

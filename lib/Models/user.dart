@@ -16,13 +16,4 @@ class User {
     required this.itemsCount,
     required this.followersCount,
   });
-
-  // User.fromJson(Map<String, dynamic> json)
-  //     : id = json['id'],
-  //       profileImageUrl = json['profile_image_url'];
-
-  // Map<String, dynamic> toJson() => {
-  //       'id': id,
-  //       'profile_image_url': profileImageUrl,
-  //     };
 }

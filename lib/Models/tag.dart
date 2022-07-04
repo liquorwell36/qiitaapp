@@ -1,13 +1,13 @@
 class Tag {
-  final int followers_count;
-  final String? icon_url;
+  final int followersCount;
+  final String? iconUrl;
   final String id;
-  final int items_count;
+  final int itemsCount;
 
   Tag({
-    required this.followers_count,
-    required this.icon_url,
+    required this.followersCount,
+    required this.iconUrl,
     required this.id,
-    required this.items_count,
+    required this.itemsCount,
   });
 }
