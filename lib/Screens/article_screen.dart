@@ -160,7 +160,6 @@ class _TagList extends StatelessWidget {
                   style: const TextStyle(color: Colors.grey),
                 ),
                 onTap: () {
-                  print("article_screen: ${tag.name}");
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (_) => TagResultsScreen(tagID: tag.name)));
                 },

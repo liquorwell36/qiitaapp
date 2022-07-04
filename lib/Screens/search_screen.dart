@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             border: Border.all(color: Colors.black),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("${searchOption}"),
+                          child: Text(searchOption),
                         ),
                       ),
                     ),
@@ -116,102 +116,97 @@ class _SearchScreenState extends State<SearchScreen> {
                     Container(
                       padding: const EdgeInsets.only(top: 8),
                       child: DataTable(
-                          sortAscending: false,
-                          columnSpacing: 0.0,
-                          headingRowHeight: 50.0,
-                          decoration:
-                              BoxDecoration(border: Border.all(width: 1)),
-                          columns: const [
-                            DataColumn(label: Text("項目")),
-                            DataColumn(label: Text("オプション")),
-                          ],
-                          rows: [
-                            DataRow(
-                              color:
-                                  MaterialStateProperty.resolveWith((states) {
-                                return Colors.grey[200];
-                              }),
-                              cells: const [
-                                DataCell(Text("タイトルに「2015」を含む")),
-                                DataCell(Text("title:2015")),
-                              ],
-                            ),
-                            const DataRow(
-                              cells: [
-                                DataCell(Text("本文に「Qiita」を含む")),
-                                DataCell(Text("body:Qiita")),
-                              ],
-                            ),
-                            DataRow(
-                              color:
-                                  MaterialStateProperty.resolveWith((states) {
-                                return Colors.grey[200];
-                              }),
-                              cells: const [
-                                DataCell(Text("コードに「Ruby」を含む")),
-                                DataCell(Text("code:Ruby")),
-                              ],
-                            ),
-                            const DataRow(
-                              cells: [
-                                DataCell(Text("「Ruby」タグが付く")),
-                                DataCell(Text("tag:Ruby")),
-                              ],
-                            ),
-                            DataRow(
-                              color:
-                                  MaterialStateProperty.resolveWith((states) {
-                                return Colors.grey[200];
-                              }),
-                              cells: const [
-                                DataCell(Text("sampleuserが作成した")),
-                                DataCell(Text("user:sampleuser")),
-                              ],
-                            ),
-                            const DataRow(
-                              cells: [
-                                DataCell(Text("「tag:Ruby」を含まない")),
-                                DataCell(Text("-tag:Ruby")),
-                              ],
-                            ),
-                            DataRow(
-                              color:
-                                  MaterialStateProperty.resolveWith((states) {
-                                return Colors.grey[200];
-                              }),
-                              cells: const [
-                                DataCell(Text("3件より多くストックされている")),
-                                DataCell(Text("stocks:>3")),
-                              ],
-                            ),
-                            const DataRow(
-                              cells: [
-                                DataCell(Text("2021-10-09以降に作成された")),
-                                DataCell(Text("created:>2021-10-09")),
-                              ],
-                            ),
-                            DataRow(
-                              color:
-                                  MaterialStateProperty.resolveWith((states) {
-                                return Colors.grey[200];
-                              }),
-                              cells: const [
-                                DataCell(Text("2021-10-01 以降に更新された")),
-                                DataCell(Text("updated:>2021-10")),
-                              ],
-                            ),
-                            const DataRow(
-                              cells: [
-                                DataCell(Text("「Go」または「AWS」を含む")),
-                                DataCell(Text("Go OR AWS")),
-                              ],
-                            ),
-                          ]),
+                        sortAscending: false,
+                        columnSpacing: 0.0,
+                        headingRowHeight: 50.0,
+                        decoration: BoxDecoration(border: Border.all(width: 1)),
+                        columns: const [
+                          DataColumn(label: Text("項目")),
+                          DataColumn(label: Text("オプション")),
+                        ],
+                        rows: [
+                          DataRow(
+                            color: MaterialStateProperty.resolveWith((states) {
+                              return Colors.grey[200];
+                            }),
+                            cells: const [
+                              DataCell(Text("タイトルに「2015」を含む")),
+                              DataCell(Text("title:2015")),
+                            ],
+                          ),
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("本文に「Qiita」を含む")),
+                              DataCell(Text("body:Qiita")),
+                            ],
+                          ),
+                          DataRow(
+                            color: MaterialStateProperty.resolveWith((states) {
+                              return Colors.grey[200];
+                            }),
+                            cells: const [
+                              DataCell(Text("コードに「Ruby」を含む")),
+                              DataCell(Text("code:Ruby")),
+                            ],
+                          ),
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("「Ruby」タグが付く")),
+                              DataCell(Text("tag:Ruby")),
+                            ],
+                          ),
+                          DataRow(
+                            color: MaterialStateProperty.resolveWith((states) {
+                              return Colors.grey[200];
+                            }),
+                            cells: const [
+                              DataCell(Text("sampleuserが作成した")),
+                              DataCell(Text("user:sampleuser")),
+                            ],
+                          ),
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("「tag:Ruby」を含まない")),
+                              DataCell(Text("-tag:Ruby")),
+                            ],
+                          ),
+                          DataRow(
+                            color: MaterialStateProperty.resolveWith((states) {
+                              return Colors.grey[200];
+                            }),
+                            cells: const [
+                              DataCell(Text("3件より多くストックされている")),
+                              DataCell(Text("stocks:>3")),
+                            ],
+                          ),
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("2021-10-09以降に作成された")),
+                              DataCell(Text("created:>2021-10-09")),
+                            ],
+                          ),
+                          DataRow(
+                            color: MaterialStateProperty.resolveWith((states) {
+                              return Colors.grey[200];
+                            }),
+                            cells: const [
+                              DataCell(Text("2021-10-01 以降に更新された")),
+                              DataCell(Text("updated:>2021-10")),
+                            ],
+                          ),
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("「Go」または「AWS」を含む")),
+                              DataCell(Text("Go OR AWS")),
+                            ],
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
