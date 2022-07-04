@@ -34,41 +34,58 @@ class _HomeScreenState extends State<HomeScreen> {
           FutureBuilder(
             future: QiitaRepository().getAuthenticatedUser(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              final Widget icon = snapshot.hasData
-                  ? _UserProfileIcon(
-                      size: 32,
-                      profileImageUrl: snapshot.data.profileImageUrl,
-                    )
-                  : const Icon(Icons.person);
-              if (QiitaRepository().isAccessToken()) {
-                return PopupMenuButton(
-                  onSelected: (value) {
-                    if (value == 'profile') {
-                      _onProfileMenuIsSelected(snapshot.data);
-                    } else {
-                      _onLogoutMenuIsSelected();
-                    }
-                  },
-                  icon: icon,
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'profile',
-                        child: Text("プロフィール"),
-                      ),
-                      const PopupMenuItem(
-                        value: 'logout',
-                        child: Text("ログアウト"),
-                      ),
-                    ];
-                  },
-                );
+              if (snapshot.connectionState == ConnectionState.done) {
+                final Widget icon = snapshot.data.profileImageUrl != ""
+                    ? _UserProfileIcon(
+                        size: 32,
+                        profileImageUrl: snapshot.data.profileImageUrl,
+                      )
+                    : const Icon(Icons.person);
+                if (snapshot.data.id != "") {
+                  return PopupMenuButton(
+                    onSelected: (value) {
+                      if (value == 'profile') {
+                        _onProfileMenuIsSelected(snapshot.data);
+                      } else {
+                        _onLogoutMenuIsSelected();
+                      }
+                    },
+                    icon: icon,
+                    itemBuilder: (context) {
+                      return [
+                        const PopupMenuItem(
+                          value: 'profile',
+                          child: Text("プロフィール"),
+                        ),
+                        const PopupMenuItem(
+                          value: 'logout',
+                          child: Text("ログアウト"),
+                        ),
+                      ];
+                    },
+                  );
+                } else {
+                  return PopupMenuButton(
+                    onSelected: (value) {
+                      _onSignInMenuIsSelected();
+                    },
+                    icon: icon,
+                    itemBuilder: (context) {
+                      return [
+                        const PopupMenuItem(
+                          value: 'SignIn',
+                          child: Text("ログインする"),
+                        ),
+                      ];
+                    },
+                  );
+                }
               } else {
                 return PopupMenuButton(
                   onSelected: (value) {
                     _onSignInMenuIsSelected();
                   },
-                  icon: icon,
+                  icon: const Icon(Icons.person),
                   itemBuilder: (context) {
                     return [
                       const PopupMenuItem(
