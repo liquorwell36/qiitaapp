@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:qiitaapp/screens/tag_results_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ArticleScreen extends StatelessWidget {
   final Article article;
@@ -73,6 +74,10 @@ class ArticleScreen extends StatelessWidget {
               ),
               Html(
                 data: article.renderedBody,
+                onLinkTap: (String? url, RenderContext context,
+                    Map<String, String> attributes, Element) {
+                  url != null ? launch(url!) : print("not valid url");
+                },
                 style: {
                   'h2': Style(
                     border: const Border(
