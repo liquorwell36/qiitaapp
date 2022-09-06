@@ -41,7 +41,7 @@ class _StockScreenState extends State<StockScreen> {
                             const SizedBox(height: 8),
                             TextButton(
                               style: TextButton.styleFrom(
-                                  backgroundColor: Colors.lightBlue,
+                                  backgroundColor: Colors.green,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   side: const BorderSide(

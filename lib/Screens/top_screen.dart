@@ -44,7 +44,7 @@ class _TopScreenState extends State<TopScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.lightBlue,
+      color: Colors.green,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
